@@ -17,6 +17,12 @@ public class Uniform extends RandVar {
 	//Mark out
 	
 	//Mark
+	/**
+	 * Constructor
+	 * @param rng random number generator
+	 * @param lowerB lowerBound
+	 * @param upperB upperBound
+	 */
 	public Uniform(RNG rng, double lowerB, double upperB) {
 		super(rng);
 		if (lowerB<=upperB) {
