@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.HashMap;
 
 import simulation.lib.Simulator;
+import simulation.lib.counter.ContinuousCounter;
+import simulation.lib.counter.DiscreteCounter;
+import simulation.lib.histogram.ContinuousHistogram;
+import simulation.lib.histogram.DiscreteHistogram;
 import simulation.lib.statistic.IStatisticObject;
 
 /**
@@ -14,14 +18,14 @@ import simulation.lib.statistic.IStatisticObject;
  */
 public class SimulationStudy {
     /*
-	 * TODO Problem 2.2.4 - configure program arguments here
+	 * Problem 2.2.4 - configure program arguments here
 	 * Here you can set the different parameters for your simulation
 	 * Note: Units are real time units (seconds).
 	 * They get converted to simulation time units in setSimulationParameters.
 	 */
 	protected long cInterArrivalTime = 10;
 	protected long cServiceTime = 11;
-	protected long cSimulationTime = 10000;
+	protected long cSimulationTime = 100000;
 
 	/**
 	 * Main method
@@ -86,12 +90,25 @@ public class SimulationStudy {
 	public long minQS;
 
 	/*
-	 * TODO Problem 2.2 - naming your statistic objects
+	 * Problem 2.2 - naming your statistic objects
 	 * Here you have to set some names (as Sting objects) for all your statistic objects
 	 * They are later used to retrieve them from the dictionary
 	 */
 	// Example for discrete counter which measures customer waiting time:
 	// public String dcWaitingTime = "discreteCounterWaitingTime";
+	
+	//Mark
+	public String dcWaitingTime = "discreteCounterWaitingTime";
+	public String dhWaitingTime = "discreteHistogramWaitingTime";
+	public String dcServiceTime = "discreteCounterServiceTime";
+	public String dhServiceTime = "discreteHistogramServiceTime";
+	
+	public String ccQueueOccupancy = "continuousCounterQueueOccupancy";
+	public String chQueueOccupancy = "continuousHistogramQueueOccupancy";
+	public String ccServerUtilization = "continuousCounterServerUtilization";
+	public String chServerUtilization = "continuousHistogramServerUtilization";
+	//Mark out
+	
 
 	private Simulator simulator;
 
@@ -126,11 +143,22 @@ public class SimulationStudy {
 		statisticObjects = new HashMap<>();
 
         /*
-          TODO Problem 2.2 - add statistic objects (counters) to the HashMap
+          Problem 2.2 - add statistic objects (counters) to the HashMap
           Here you have to create your counters and add them to the statisticObjects HashMap
           Use the name which you specified above as the key
          */
         // Example: statisticObjects.put(dcWaitingTime, new DiscreteCounter("waiting time/customer"));
+		
+		//Mark
+		statisticObjects.put(dcWaitingTime, new DiscreteCounter("waiting time/customer"));
+		statisticObjects.put(dhWaitingTime, new DiscreteHistogram("waitingTimePerCustomer", 10, 0, 10000));
+		statisticObjects.put(dcServiceTime, new DiscreteCounter("service time/customer"));
+		statisticObjects.put(dhServiceTime, new DiscreteHistogram("serviceTimePerCustomer", 10, 0, 50));
+		statisticObjects.put(ccQueueOccupancy, new ContinuousCounter("queue occupancy", simulator));
+		statisticObjects.put(chQueueOccupancy, new ContinuousHistogram("queueOccupancy", 10, 0, 50, simulator));
+		statisticObjects.put(ccServerUtilization, new ContinuousCounter("server utilization", simulator));
+		statisticObjects.put(chServerUtilization, new ContinuousHistogram("serverUtilization", 10, 0, 50, simulator));		
+		//Mark out
 	}
 
 

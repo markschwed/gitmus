@@ -33,11 +33,19 @@ public class ContinuousHistogram extends Histogram {
 	@Override
 	public void count(double x) {
 		/**
-		 * TODO Problem 2.1.2 - count
+		 * Problem 2.1.2 - count
 		 * Implement this function!
 		 * Also update lastSampleSize and lastSampleTime appropriately
 		 * Hint: See course syllabus 1.5.4
 		 */
+		//Mark		
+		if(getNumIntervals()>0) {
+			long ti = sim.getSimTime();
+			incrementBin(getBinNumber(lastSampleSize), ti-lastSampleTime);
+			lastSampleSize=x;
+			lastSampleTime=ti;
+		}
+		//Mark out
 	}
 	
 	/**

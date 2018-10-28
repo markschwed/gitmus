@@ -23,11 +23,17 @@ public class DiscreteHistogram extends Histogram {
 	@Override
 	public void count(double x) {
 		/**
-		 * TODO Problem 2.1.2 - count
+		 * Problem 2.1.2 - count
 		 * Implement this function!
 		 * Also update numSamples
 		 * Hint: See course syllabus 1.5.2
 		 */
+		//Mark
+		if(getNumIntervals()>0) {
+			incrementBin(getBinNumber(x), 1);
+			numSamples++;
+		}
+		//Mark out
 	}
 	
 	/**

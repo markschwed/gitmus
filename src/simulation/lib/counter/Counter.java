@@ -66,13 +66,19 @@ public abstract class Counter implements IStatisticObject{
 	 */
 	public double getStdDeviation() {
 		/**
-		 * TODO Problem 2.1.1 - getStdDeviation
+		 * Problem 2.1.1 - getStdDeviation
 		 * Implement this function!
 		 * You can use other methods of this class in order to calculate the standard deviation
 		 * Hint: See course syllabus 1.3.4
 		 */
-		double sdev = 0.0;
-		return sdev;
+		//Mark
+		double var = getVariance();
+		if(var < 0) {
+			throw new NumberFormatException("getVariance returned result < 0");
+		} else {
+			return Math.sqrt(var);
+		}
+		//Mark out		
 	}
 
 	/**
@@ -81,10 +87,19 @@ public abstract class Counter implements IStatisticObject{
 	 */
 	public void count(double x) {
 		/**
-		 * TODO Problem 2.1.1 - count
+		 * Problem 2.1.1 - count
 		 * Implement this function!
 		 * Hint: Take a look at the javadoc comment of this method
 		 */
+		//Mark
+		if (x < min) {
+			min = x;
+		}
+		if (x > max) {
+			max = x;
+		}
+		numSamples++;
+		//Mark out
 	}
 
 	/**
@@ -93,11 +108,14 @@ public abstract class Counter implements IStatisticObject{
 	 */
 	public void increaseSumPowerOne(double value) {
 		/**
-		 * TODO Problem 2.1.1 - increaseSumPowerOne
+		 * Problem 2.1.1 - increaseSumPowerOne
 		 * Implement this function!
 		 * This method updates internal data "sumPowerOne" which is needed for the calculation of empirical moments
 		 * Hint: DiscreteCounter and ContinuousCounter pass different values to this method
 		 */
+		//Mark
+		sumPowerOne += value;
+		//Mark out
 	}
 
 	/**
@@ -106,11 +124,14 @@ public abstract class Counter implements IStatisticObject{
 	 */
 	public void increaseSumPowerTwo(double value) {
 		/**
-		 * TODO Problem 2.1.1 - increaseSumPowerTwo
+		 * Problem 2.1.1 - increaseSumPowerTwo
 		 * Implement this function!
 		 * This method updates internal data "sumPowerTwo" which is needed for the calculation of empirical moments
 		 * Hint: DiscreteCounter and ContinuousCounter pass different values to this method
 		 */
+		//Mark
+		sumPowerTwo += value * value;
+		//Mark out
 	}
 	
 	/**

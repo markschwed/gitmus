@@ -66,14 +66,21 @@ public abstract class Histogram implements IStatisticObject{
 	 */
 	protected int getBinNumber(double x) {
 		/**
-		 * TODO Problem 2.1.2 - getBinNumber
+		 * Problem 2.1.2 - getBinNumber
 		 * Implement this function!
 		 * Hint: Also consider the cases if x is greater or equal than the upper bound (return the number of highest bin)
          * and smaller than the lower bound (return the number of the lowest bin -> 0).
          * This way, the histogram is open-ended on both sides
 		 */
-		int binNumber = 0;
-		return binNumber;
+		//Mark
+		if (x>=getUpperBound()) {
+			return (int) getNumIntervals()-1;
+		}
+		if (x<getLowerBound()) {
+			return 0;
+		}
+		return (int) Math.floor((x-getLowerBound()) / getDelta());
+		//Mark out
 	}
 
 	/**
@@ -83,10 +90,13 @@ public abstract class Histogram implements IStatisticObject{
 	 */
 	protected void incrementBin(int binNumber, double x) {
         /**
-         * TODO Problem 2.1.2 - incrementBin
+         * Problem 2.1.2 - incrementBin
          * Implement this function!
          * Hint: Take a look at the javadoc comment of this method
          */
+		//Mark
+		bins[binNumber] += x;
+		//Mark out
 	}
 
 
