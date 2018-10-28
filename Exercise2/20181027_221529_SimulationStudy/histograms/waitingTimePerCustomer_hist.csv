@@ -1,0 +1,13 @@
+#histogram type: discrete-time histogram
+#waitingTimePerCustomer
+#lowerBound ; upperBound ; relative frequency
+0,0;5,0;0,5555555555555556
+5,0;10,0;0,4444444444444444
+10,0;15,0;0,0
+15,0;20,0;0,0
+20,0;25,0;0,0
+25,0;30,0;0,0
+30,0;35,0;0,0
+35,0;40,0;0,0
+40,0;45,0;0,0
+45,0;50,0;0,0
