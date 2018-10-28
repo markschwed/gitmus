@@ -35,6 +35,11 @@ public class SimulationStudy {
 		 * create simulation object
 		 */
 		Simulator sim = new Simulator();
+		
+		//Mark
+		RandVarTest.testRandVars();
+		//Mark out
+		
 		/*
 		 * run simulation
 		 */
@@ -88,7 +93,7 @@ public class SimulationStudy {
 	 * Minimum queue size.
 	 */
 	public long minQS;
-
+	
 	/*
 	 * Problem 2.2 - naming your statistic objects
 	 * Here you have to set some names (as Sting objects) for all your statistic objects
