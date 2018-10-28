@@ -112,6 +112,8 @@ public class SimulationStudy {
 	public String chQueueOccupancy = "continuousHistogramQueueOccupancy";
 	public String ccServerUtilization = "continuousCounterServerUtilization";
 	public String chServerUtilization = "continuousHistogramServerUtilization";
+	
+	public String dcRandVarUniform1Name = "discreteCounterUniform1";
 	//Mark out
 	
 
@@ -163,6 +165,8 @@ public class SimulationStudy {
 		statisticObjects.put(chQueueOccupancy, new ContinuousHistogram("queueOccupancy", 10, 0, 50, simulator));
 		statisticObjects.put(ccServerUtilization, new ContinuousCounter("server utilization", simulator));
 		statisticObjects.put(chServerUtilization, new ContinuousHistogram("serverUtilization", 10, 0, 50, simulator));		
+		
+		statisticObjects.put(dcRandVarUniform1Name, new DiscreteCounter("uniform1"));
 		//Mark out
 	}
 
