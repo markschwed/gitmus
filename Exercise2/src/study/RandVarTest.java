@@ -3,12 +3,13 @@ package study;
 import simulation.lib.counter.DiscreteCounter;
 import simulation.lib.randVars.continous.ErlangK;
 import simulation.lib.randVars.continous.Exponential;
+import simulation.lib.randVars.continous.HyperExponential;
 import simulation.lib.randVars.continous.Uniform;
 import simulation.lib.rng.RNG;
 import simulation.lib.rng.StdRNG;
 
 /*
- * TODO Problem 2.3.3 and 2.3.4[Bonus] - implement this class
+ * Problem 2.3.3 and 2.3.4[Bonus] - implement this class
  * You can call your test from the main-method in SimulationStudy
  */
 public class RandVarTest {
@@ -111,13 +112,42 @@ public class RandVarTest {
     	System.out.println("\tErlangK 2 Variance:\t\t " + dcErlangK2.getVariance());
     	System.out.println("\tErlangK 2 Cvar:\t\t\t " + dcErlangK2.getStdDeviation()/dcErlangK2.getMean());
     	
-    	
     	//ErlangK3 cannot be calculated because Cvar needs to be 1 or lower for ErlangK
     	System.out.println();
     	System.out.println("ErlangK3 cannot be calculated because Cvar needs to be 1 or lower for ErlangK.");
     	
+    	//HyperExponential1 cannot be calculated because Cvar needs to be 1 or larger for HyperExponential
+    	System.out.println();
+    	System.out.println("HyperExponential1 cannot be calculated because Cvar needs to be 1 or larger for HyperExponential.");
     	
-    	
+    	//HyperExponential2
+    	HyperExponential randVarHyperExponential2 = new HyperExponential(rng, 1, 1, 1, 1);
+    	randVarHyperExponential2.setMeanAndCvar(1, 1);
+    	System.out.println(randVarHyperExponential2.toString());
+    	DiscreteCounter dcHyperExponential2 = new DiscreteCounter("HyperExponential 2");
+    	for (int i=0;i<1000000;i++) {
+    		double rv = randVarHyperExponential2.getRV();
+    		dcHyperExponential2.count(rv);
+    	}
+    	System.out.println("\tHyperExponential 2 Number of Samples:\t " + dcHyperExponential2.getNumSamples());
+    	System.out.println("\tHyperExponential 2 Mean:\t\t\t " + dcHyperExponential2.getMean());
+    	System.out.println("\tHyperExponential 2 Variance:\t\t " + dcHyperExponential2.getVariance());
+    	System.out.println("\tHyperExponential 2 Cvar:\t\t\t " + dcHyperExponential2.getStdDeviation()/dcHyperExponential2.getMean());
+
+    	//HyperExponential3
+    	HyperExponential randVarHyperExponential3 = new HyperExponential(rng, 1, 1, 1, 1);
+    	randVarHyperExponential3.setMeanAndCvar(1, 2);
+    	System.out.println(randVarHyperExponential3.toString());
+    	DiscreteCounter dcHyperExponential3 = new DiscreteCounter("HyperExponential 3");
+    	for (int i=0;i<1000000;i++) {
+    		double rv = randVarHyperExponential3.getRV();
+    		dcHyperExponential3.count(rv);
+    	}
+    	System.out.println("\tHyperExponential 3 Number of Samples:\t " + dcHyperExponential3.getNumSamples());
+    	System.out.println("\tHyperExponential 3 Mean:\t\t\t " + dcHyperExponential3.getMean());
+    	System.out.println("\tHyperExponential 3 Variance:\t\t " + dcHyperExponential3.getVariance());
+    	System.out.println("\tHyperExponential 3 Cvar:\t\t\t " + dcHyperExponential3.getStdDeviation()/dcHyperExponential3.getMean());
+	
     	System.out.println();
     	System.exit(0);
     	//Mark out
