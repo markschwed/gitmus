@@ -1,3 +1,0 @@
-#counter ; numSamples ; MEAN; VAR; STD; CVAR; MIN; MAX
-service time/customer;0;0.0;0.0;0.0;0.0;Infinity;-Infinity
-waiting time/customer;0;0.0;0.0;0.0;0.0;Infinity;-Infinity

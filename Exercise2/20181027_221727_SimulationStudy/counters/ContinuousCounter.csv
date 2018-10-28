@@ -1,3 +1,0 @@
-#counter ; numSamples ; MEAN; VAR; STD; CVAR; MIN; MAX
-queue occupancy;0;0.0;0.0;0.0;0.0;Infinity;-Infinity
-server utilization;0;0.0;0.0;0.0;0.0;Infinity;-Infinity
