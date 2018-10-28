@@ -1,6 +1,7 @@
 package study;
 
 import simulation.lib.counter.DiscreteCounter;
+import simulation.lib.randVars.continous.ErlangK;
 import simulation.lib.randVars.continous.Exponential;
 import simulation.lib.randVars.continous.Uniform;
 import simulation.lib.rng.RNG;
@@ -81,6 +82,41 @@ public class RandVarTest {
     	//Exponential3 cannot be calculated because Cvar needs to be 1 for Exponential
     	System.out.println();
     	System.out.println("Exponential3 cannot be calculated because Cvar needs to be 1 for Exponential.");
+    	
+    	//ErlangK1
+    	ErlangK randVarErlangK1 = new ErlangK(rng, 0, 1);
+    	randVarErlangK1.setMeanAndCvar(1, 0.1);
+    	System.out.println(randVarErlangK1.toString());
+    	DiscreteCounter dcErlangK1 = new DiscreteCounter("ErlangK 1");
+    	for (int i=0;i<1000000;i++) {
+    		double rv = randVarErlangK1.getRV();
+    		dcErlangK1.count(rv);
+    	}
+    	System.out.println("\tErlangK 1 Number of Samples:\t " + dcErlangK1.getNumSamples());
+    	System.out.println("\tErlangK 1 Mean:\t\t\t " + dcErlangK1.getMean());
+    	System.out.println("\tErlangK 1 Variance:\t\t " + dcErlangK1.getVariance());
+    	System.out.println("\tErlangK 1 Cvar:\t\t\t " + dcErlangK1.getStdDeviation()/dcErlangK1.getMean());
+    	
+    	//ErlangK2
+    	ErlangK randVarErlangK2 = new ErlangK(rng, 0, 1);
+    	randVarErlangK2.setMeanAndCvar(1, 1);
+    	System.out.println(randVarErlangK2.toString());
+    	DiscreteCounter dcErlangK2 = new DiscreteCounter("ErlangK 2");
+    	for (int i=0;i<1000000;i++) {
+    		double rv = randVarErlangK2.getRV();
+    		dcErlangK2.count(rv);
+    	}
+    	System.out.println("\tErlangK 2 Number of Samples:\t " + dcErlangK2.getNumSamples());
+    	System.out.println("\tErlangK 2 Mean:\t\t\t " + dcErlangK2.getMean());
+    	System.out.println("\tErlangK 2 Variance:\t\t " + dcErlangK2.getVariance());
+    	System.out.println("\tErlangK 2 Cvar:\t\t\t " + dcErlangK2.getStdDeviation()/dcErlangK2.getMean());
+    	
+    	
+    	//ErlangK3 cannot be calculated because Cvar needs to be 1 or lower for ErlangK
+    	System.out.println();
+    	System.out.println("ErlangK3 cannot be calculated because Cvar needs to be 1 or lower for ErlangK.");
+    	
+    	
     	
     	System.out.println();
     	System.exit(0);
