@@ -24,8 +24,8 @@ public class SimulationStudy {
 	 * They get converted to simulation time units in setSimulationParameters.
 	 */
 	protected long cInterArrivalTime = 10;
-	protected long cServiceTime = 11;
-	protected long cSimulationTime = 100000;
+	protected long cServiceTime = 9;
+	protected long cSimulationTime = 1000;
 
 	/**
 	 * Main method
@@ -113,7 +113,8 @@ public class SimulationStudy {
 	public String ccServerUtilization = "continuousCounterServerUtilization";
 	public String chServerUtilization = "continuousHistogramServerUtilization";
 	
-	public String dcRandVarUniform1Name = "discreteCounterUniform1";
+	public String dcQueueOccupancy = "discreteCounterQueueOccupancy";
+	public String dcServerUtilization = "discreteCounterServerUtilization";
 	//Mark out
 	
 
@@ -158,15 +159,15 @@ public class SimulationStudy {
 		
 		//Mark
 		statisticObjects.put(dcWaitingTime, new DiscreteCounter("waiting time/customer"));
-		statisticObjects.put(dhWaitingTime, new DiscreteHistogram("waitingTimePerCustomer", 10, 0, 10000));
+		statisticObjects.put(dhWaitingTime, new DiscreteHistogram("waitingTimePerCustomer", 10, 0, 1000));
 		statisticObjects.put(dcServiceTime, new DiscreteCounter("service time/customer"));
 		statisticObjects.put(dhServiceTime, new DiscreteHistogram("serviceTimePerCustomer", 10, 0, 50));
-		statisticObjects.put(ccQueueOccupancy, new ContinuousCounter("queue occupancy", simulator));
+		//statisticObjects.put(ccQueueOccupancy, new ContinuousCounter("queue occupancy", simulator));
+		statisticObjects.put(dcQueueOccupancy, new DiscreteCounter("queue occupancy"));
 		statisticObjects.put(chQueueOccupancy, new ContinuousHistogram("queueOccupancy", 10, 0, 50, simulator));
-		statisticObjects.put(ccServerUtilization, new ContinuousCounter("server utilization", simulator));
+		//statisticObjects.put(ccServerUtilization, new ContinuousCounter("server utilization", simulator));
+		statisticObjects.put(dcServerUtilization, new DiscreteCounter("server utilization"));
 		statisticObjects.put(chServerUtilization, new ContinuousHistogram("serverUtilization", 10, 0, 50, simulator));		
-		
-		statisticObjects.put(dcRandVarUniform1Name, new DiscreteCounter("uniform1"));
 		//Mark out
 	}
 

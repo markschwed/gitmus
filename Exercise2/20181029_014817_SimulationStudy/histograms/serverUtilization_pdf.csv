@@ -1,9 +1,9 @@
-#histogram type: discrete-time histogram
-#serviceTimePerCustomer
+#histogram type: continuous-time histogram
+#serverUtilization
 #lowerBound ; upperBound ; probability density
-0,0;5,0;0,0
+0,0;5,0;0,2
 5,0;10,0;0,0
-10,0;15,0;0,2
+10,0;15,0;0,0
 15,0;20,0;0,0
 20,0;25,0;0,0
 25,0;30,0;0,0

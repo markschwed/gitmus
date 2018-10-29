@@ -180,10 +180,12 @@ public class Simulator implements IEventObserver{
         
         //Mark
         if (state.serverBusy) {
-        	sims.statisticObjects.get(sims.ccServerUtilization).count(1);
+        	//sims.statisticObjects.get(sims.ccServerUtilization).count(1);
+        	sims.statisticObjects.get(sims.dcServerUtilization).count(1);
         	sims.statisticObjects.get(sims.chServerUtilization).count(1);
         } else {
-        	sims.statisticObjects.get(sims.ccServerUtilization).count(0);
+        	//sims.statisticObjects.get(sims.ccServerUtilization).count(0);
+        	sims.statisticObjects.get(sims.dcServerUtilization).count(0);
         	sims.statisticObjects.get(sims.chServerUtilization).count(0);
         }
         //Mark out
@@ -224,10 +226,12 @@ public class Simulator implements IEventObserver{
         
         //Mark
         if (state.serverBusy) {
-        	sims.statisticObjects.get(sims.ccServerUtilization).count(1);
+        	//sims.statisticObjects.get(sims.ccServerUtilization).count(1);
+        	sims.statisticObjects.get(sims.dcServerUtilization).count(1);
         	sims.statisticObjects.get(sims.chServerUtilization).count(1);
         } else {
-        	sims.statisticObjects.get(sims.ccServerUtilization).count(0);
+        	//sims.statisticObjects.get(sims.ccServerUtilization).count(0);
+        	sims.statisticObjects.get(sims.dcServerUtilization).count(0);
         	sims.statisticObjects.get(sims.chServerUtilization).count(0);
         }
         //Mark out
@@ -251,7 +255,8 @@ public class Simulator implements IEventObserver{
          */
 		
 		//Mark
-		sims.statisticObjects.get(sims.ccQueueOccupancy).count(state.queueSize);
+		//sims.statisticObjects.get(sims.ccQueueOccupancy).count(state.queueSize);
+		sims.statisticObjects.get(sims.dcQueueOccupancy).count(state.queueSize);
 		sims.statisticObjects.get(sims.chQueueOccupancy).count(state.queueSize);
 		//Mark out
 	}

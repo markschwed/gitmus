@@ -1,0 +1,5 @@
+#counter ; numSamples ; MEAN; VAR; STD; CVAR; MIN; MAX
+queue occupancy;101;0.0;0.0;0.0;0.0;0.0;0.0
+service time/customer;100;9.0;0.0;0.0;0.0;9.0;9.0
+server utilization;201;0.5024875621890548;0.2499938120343556;0.49999381199606424;0.9950371902099892;0.0;1.0
+waiting time/customer;100;0.0;0.0;0.0;0.0;0.0;0.0

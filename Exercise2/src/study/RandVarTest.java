@@ -149,7 +149,6 @@ public class RandVarTest {
     	System.out.println("\tHyperExponential 3 Cvar:\t\t\t " + dcHyperExponential3.getStdDeviation()/dcHyperExponential3.getMean());
 	
     	System.out.println();
-    	System.exit(0);
     	//Mark out
     }
 }

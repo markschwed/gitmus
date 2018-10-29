@@ -1,9 +1,9 @@
-#histogram type: discrete-time histogram
-#serviceTimePerCustomer
+#histogram type: continuous-time histogram
+#queueOccupancy
 #(lowerBound+upperBound)/2 ; probability
-2,5;0,0
+2,5;1,0
 7,5;0,0
-12,5;1,0
+12,5;0,0
 17,5;0,0
 22,5;0,0
 27,5;0,0
