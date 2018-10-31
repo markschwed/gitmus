@@ -65,14 +65,14 @@ public class DiscreteConfidenceCounter extends DiscreteCounter{
     	// "If degsOfFreedom is out of the values range, the maximum number for degsOfFreedom 
     	//  in the quantile array should be chosen."
     	if(degsOfFreedom > tAlphaMatrix[0][tAlphaMatrix[0].length-1]) {
-    		System.out.println("The provided degrees of freedom are out of range and are now capped.");
+    		//System.out.println("The provided degrees of freedom are out of range and are now capped.");
     		degsOfFreedom = (long) tAlphaMatrix[0][tAlphaMatrix[0].length-1];
     	}
-    	System.out.println("Degrees of freedom: " + degsOfFreedom);
+    	//System.out.println("Degrees of freedom: " + degsOfFreedom);
     	
     	// Get the row of the table based on the alpha value
     	int row = getRow();
-    	System.out.println("The most suitable alpha value is provided for row " + row + ".");
+    	//System.out.println("The most suitable alpha value is provided for row " + row + ".");
     	
     	// Search if the array contains the degree of freedom provided
     	int column = -1;
@@ -83,21 +83,21 @@ public class DiscreteConfidenceCounter extends DiscreteCounter{
     		}
     	}
     	if (column >=0) {
-    		System.out.println("Exact degrees of freedom are found in the given table in column " + column + ".");
+    		//System.out.println("Exact degrees of freedom are found in the given table in column " + column + ".");
     		double t = tAlphaMatrix[row - 1][column];
-    		System.out.println("T: " + t);
+    		//System.out.println("T: " + t);
     		return t;
     	}
     	
     	// "If degsOfFreedom is between two entries in the array, linearInterpol should return
     	//  a linearly interpolated value."
-    	System.out.println("Did not find exact degrees of freedom in the given table so going for interpolation.");
+    	//System.out.println("Did not find exact degrees of freedom in the given table so going for interpolation.");
     	int indexlow = 0;
     	while (tAlphaMatrix[0][indexlow] < degsOfFreedom) {
     		indexlow++;
     	}
     	double t = linearInterpol(tAlphaMatrix[0][indexlow-1], tAlphaMatrix[0][indexlow], tAlphaMatrix[row - 1][indexlow-1], tAlphaMatrix[row - 1][indexlow], degsOfFreedom);
-    	System.out.println("T: " + t);
+    	//System.out.println("T: " + t);
 		return t;
 	}
     
@@ -120,13 +120,13 @@ public class DiscreteConfidenceCounter extends DiscreteCounter{
      */
     private int getRow() {
 		if (alpha < 0.05) {
-			System.out.println("We now calculate with alpha: 0.01");
+			//System.out.println("We now calculate with alpha: 0.01");
 			return 2;
 		} else if (alpha < 0.1) {
-			System.out.println("We now calculate with alpha: 0.05");
+			//System.out.println("We now calculate with alpha: 0.05");
 			return 3;
 		} else {
-			System.out.println("We now calculate with alpha: 0.1");
+			//System.out.println("We now calculate with alpha: 0.1");
 			return 4;
 		}
 	}
@@ -158,7 +158,7 @@ public class DiscreteConfidenceCounter extends DiscreteCounter{
     @Override
     public String report() {
         String out = super.report();
-        out += ("" + "\talpha = " + alpha + "\n" +
+        out += ("\n" + "\talpha = " + alpha + "\n" +
                 "\tt(1-alpha/2) = " + getT(getNumSamples() - 1) + "\n" +
                 "\tlower bound = " + getLowerBound() + "\n" +
                 "\tupper bound = " + getUpperBound());

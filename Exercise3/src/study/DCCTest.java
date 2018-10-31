@@ -1,23 +1,58 @@
 package study;
 
 import simulation.lib.counter.DiscreteConfidenceCounter;
+import simulation.lib.randVars.RandVar;
+import simulation.lib.randVars.continous.Normal;
+import simulation.lib.rng.StdRNG;
 
-/*
- * TODO Problem 3.1.3 and 3.1.4 - implement this class
- */
 public class DCCTest {
 
     public static void main(String[] args) {
-    	//Mark
-    	DiscreteConfidenceCounter test = new DiscreteConfidenceCounter("Marks Test",0.06);
-    	test.getT(3);
-    	test.report();
-    	System.exit(0);
-    	//Mark out
         testDCC();
     }
 
     public static void testDCC() {
-        // TODO Auto-generated method stub
+    	
+        // 3.1.3
+    	StdRNG rng = new StdRNG();
+    	double mean = 10;
+    	double[] cvar = {0.25, 0.5, 1, 2, 4};
+    	int[] n = {5, 10, 50, 100};
+    	double[] alpha = {0.1,0.05};
+    	int numberexperiments = 500;
+
+    	for (double alph : alpha) {
+    		DiscreteConfidenceCounter dcc = new DiscreteConfidenceCounter("DiscreteConfidenceCounter", alph);
+    		System.out.println("Confidence interval: " + (1-alph) + "; Alpha: " + alph);
+    		System.out.println("Number of experiments: " + numberexperiments);
+    		System.out.println();
+			Normal rvNormal = new Normal(rng);
+			for (double cv : cvar) {
+				rvNormal.setMeanAndCvar(mean, cv);
+				System.out.println("        Mean: " + mean);
+				System.out.println("        Cvar: " + cv);
+				for (int nsamples : n) {
+	    			System.out.println("    Numer of samples: " + nsamples);
+				
+    				int successfulexperiments = 0;
+    				for (int j=0; j<numberexperiments; j++) {
+    					dcc.reset();
+        				for (int i=0; i<nsamples; i++) {
+        					dcc.count(rvNormal.getRV());
+        				}
+        				//System.out.println("            " + dcc.report());
+        				//System.out.println();        				
+        				if (mean >= dcc.getLowerBound() && mean <= dcc.getUpperBound()) {
+        					successfulexperiments++;
+        				}
+    				}
+    				System.out.println("        Fraction of successful experiments: " + (double) successfulexperiments/numberexperiments);
+				}
+				System.out.println();
+			}		
+    	}
+    	
+    	
+    	System.exit(0);
     }
 }
