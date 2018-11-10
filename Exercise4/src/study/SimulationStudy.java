@@ -21,22 +21,19 @@ import simulation.lib.statistic.IStatisticObject;
  * program/simulator parameters. Starts the simulation.
  */
 public class SimulationStudy {
-	/*
-	 * TODO Problem 4.2.3 - Set the simulation time here!
-	 * Mind the interarrival time of 1s to set the simulation time for approx. 10^1 or 10^5 customers
-     * Note: Units are real time units (seconds).
-     * They get converted to simulation time units in setSimulationParameters.
-     */
-	protected long cSimulationTime = 16000;
+
+	//protected long cSimulationTime = 100000;
+	//protected long cSimulationTime = 10;
+	protected long cSimulationTime = 100000;
 
 	/**
 	 * Main method
 	 */
 	public static void main(String[] args) {
 		
-		
-		
-    	
+		System.out.println("##### AUTOCORRELATION TEST");
+		AutocorrelationTest.testAutocorrelation();
+		System.out.println("##### SIMULATION");
 		/*
 		 * create simulation object
 		 */
@@ -44,16 +41,11 @@ public class SimulationStudy {
 		/*
 		 * run simulation
 		 */
-		System.out.println("##### AUTOCORRELATIONTEST");
-		AutocorrelationTest.testAutocorrelation();
-		
-		System.out.println("##### SIMULATION START");
 		sim.start();
 		/*
 		 * print out report
 		 */
 		sim.report();
-		System.out.println("fertig");
 	}
 
 	// PARAMETERS
@@ -132,25 +124,13 @@ public class SimulationStudy {
 	private void setSimulationParameters() {
 		simulationTime = simulator.realTimeToSimTime(cSimulationTime);
 
-		/*
-		 * TODO Problem 4.2.1/2/5 - Create randVar instances
-		 * Create instances for this.randVarInterArrivalTime and this.randVarServiceTime
-		 * !!! Make sure that they use StdRNG objects with DIFFERENT SEEDS !!!
-		 * These random variables are later used in the Simulator class to create random interarrival and service times
-		 * Notice that the mean values need to be modified for 4.2.2 and 4.2.5!
-		 */
-		double meanInterarrivaltime = 1;
-		double meanServicetime =0.64;
+		StdRNG rng1 = new StdRNG(0);
+		StdRNG rng2 = new StdRNG(1);
+		Exponential iat = new Exponential(rng1, simulator.realTimeToSimTime(1));	
+		Exponential st = new Exponential(rng2, simulator.realTimeToSimTime(0.95));	
 		
-		StdRNG stdRNG1 = new StdRNG(0);
-		stdRNG1.setSeed(1);
-		StdRNG stdRNG2 = new StdRNG(0);
-		stdRNG2.setSeed(3);
-		
-		this.randVarInterArrivalTime = new Exponential(stdRNG1, meanInterarrivaltime);//,meanInterarrivaltime);
-		this.randVarServiceTime = new Exponential(stdRNG2, meanServicetime);//, meanServicetime);
-	
-	
+		this.randVarInterArrivalTime = iat;
+		this.randVarServiceTime = st;
 	}
 
 	/**
@@ -180,11 +160,7 @@ public class SimulationStudy {
 		statisticObjects.put(cthServerUtilization,
 				new ContinuousHistogram("server_utilization_over_time", 80, 0, 80, simulator));
 
-		/*
-		 * TODO Problem 4.2.5 - Create a DiscreteAutocorrelationCounter here
-		 */
-		
-		statisticObjects.put(dtaWaitingTime, new DiscreteAutocorrelationCounter("correlation customer waiting time", 20));
+		statisticObjects.put(dtaWaitingTime, new DiscreteAutocorrelationCounter("waiting time", 20));
 	}
 
 
