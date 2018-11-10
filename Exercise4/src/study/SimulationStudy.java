@@ -27,12 +27,16 @@ public class SimulationStudy {
      * Note: Units are real time units (seconds).
      * They get converted to simulation time units in setSimulationParameters.
      */
-	protected long cSimulationTime = 100000;
+	protected long cSimulationTime = 16000;
 
 	/**
 	 * Main method
 	 */
 	public static void main(String[] args) {
+		
+		
+		
+    	
 		/*
 		 * create simulation object
 		 */
@@ -40,11 +44,16 @@ public class SimulationStudy {
 		/*
 		 * run simulation
 		 */
+		System.out.println("##### AUTOCORRELATIONTEST");
+		AutocorrelationTest.testAutocorrelation();
+		
+		System.out.println("##### SIMULATION START");
 		sim.start();
 		/*
 		 * print out report
 		 */
 		sim.report();
+		System.out.println("fertig");
 	}
 
 	// PARAMETERS
@@ -130,6 +139,18 @@ public class SimulationStudy {
 		 * These random variables are later used in the Simulator class to create random interarrival and service times
 		 * Notice that the mean values need to be modified for 4.2.2 and 4.2.5!
 		 */
+		double meanInterarrivaltime = 1;
+		double meanServicetime =0.64;
+		
+		StdRNG stdRNG1 = new StdRNG(0);
+		stdRNG1.setSeed(1);
+		StdRNG stdRNG2 = new StdRNG(0);
+		stdRNG2.setSeed(3);
+		
+		this.randVarInterArrivalTime = new Exponential(stdRNG1, meanInterarrivaltime);//,meanInterarrivaltime);
+		this.randVarServiceTime = new Exponential(stdRNG2, meanServicetime);//, meanServicetime);
+	
+	
 	}
 
 	/**
@@ -162,6 +183,8 @@ public class SimulationStudy {
 		/*
 		 * TODO Problem 4.2.5 - Create a DiscreteAutocorrelationCounter here
 		 */
+		
+		statisticObjects.put(dtaWaitingTime, new DiscreteAutocorrelationCounter("correlation customer waiting time", 20));
 	}
 
 

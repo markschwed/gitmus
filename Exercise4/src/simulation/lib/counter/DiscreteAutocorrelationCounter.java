@@ -21,9 +21,6 @@ public class DiscreteAutocorrelationCounter extends DiscreteCounter{
 
 	public DiscreteAutocorrelationCounter(String variable, String type, int maxLag) {
 		super(variable);
-		if(maxLag < 0) {
-			throw new IllegalArgumentException("maxLag needs to be 0 or greater");
-		}
 		setMaxLag(maxLag);
 		reset();
 	}
@@ -33,14 +30,35 @@ public class DiscreteAutocorrelationCounter extends DiscreteCounter{
 	}
 	
 	public void setMaxLag(long maxLag) {
+		if(maxLag < 0) {
+			throw new IllegalArgumentException("maxLag needs to be 0 or greater");
+		}
 		this.maxLag = (int) maxLag;
 		reset();
 	}
 	
 	public void count(double x) {
-		super.count(x);
+		int sampleNr = (int) this.getNumSamples();
+		if (sampleNr < maxLag) {
+			firstValues[sampleNr] = x;
+		}
 		
-		//TODO
+		for (int j = 0; j<=maxLag; j++) {
+			if(sampleNr-j >= 0) {
+				if(j==0) {
+					squaredSum[j] += x*x;
+				} else {
+					squaredSum[j] += x*lastValues[maxLag-j];
+				}
+			}
+		}
+		
+		for (int i = 0; i<maxLag-1; i++) {
+			lastValues[i]=lastValues[i+1];
+		}
+		lastValues[maxLag-1]= x;
+	
+		super.count(x);
 	}
 	
 	public void reset() {
@@ -51,12 +69,21 @@ public class DiscreteAutocorrelationCounter extends DiscreteCounter{
 	}
 	
 	public double getAutoCovariance(int lag) {
-		if (lag > maxLag || lag > getNumSamples()) {
-			throw new IllegalArgumentException("your lag is greater than maxLag or greater than the number of samples");
+		if (lag > maxLag || lag > getNumSamples()-1) {
+			throw new IllegalArgumentException("your lag is greater than maxLag or greater than the number of samples minus one");
+		}
+		double firstValuesSum=0;
+		double lastValuesSum=0;
+		
+		for (int i=0; i<lag;i++) {
+			firstValuesSum += firstValues[i];
 		}
 		
-		//TODO
-		return 1;
+		for (int j=maxLag-lag;j<maxLag;j++) {
+			lastValuesSum += lastValues[j];
+		}
+			
+		return (1.0/(getNumSamples()-(long)lag))*(squaredSum[lag]-getMean()*(2*getSumPowerOne()-firstValuesSum-lastValuesSum))+getMean()*getMean(); 
 	}
 
 	public double getAutoCorrelation(int lag) {
