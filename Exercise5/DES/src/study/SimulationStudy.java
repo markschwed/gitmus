@@ -26,21 +26,23 @@ import simulation.lib.statistic.IStatisticObject;
  */
 public class SimulationStudy {
 	 /*
-	 * TODO Problem 5.1 - Configure program arguments here
+	 * Problem 5.1 - Configure program arguments here
 	 * Problem 5.1.1 - nInit and lBatch
 	 */
-	public long setNInit = 100;
-	public long setLBatch = 100;
+	long setNInit = 100;
+	long setLBatch = 100;
 	
 	/*
-	 * TODO Problem 5.1.3 - Add attributes to configure your E[ST] and E[IAT] for the simulation
+	 * Problem 5.1.3 - Add attributes to configure your E[ST] and E[IAT] for the simulation
 	 * Here you can set the different parameters for your simulation
 	 * Note: Units are real time units (seconds).
 	 * They get converted to simulation time units in setSimulationParameters.
 	 */
 	 // e.g. protected cNInit = ...
 	 //protected cCvar = ... <- configuration Parameter for cVar[IAT]
-
+	double setRho = 0.5;
+	double setIATCvar = 1;
+	
 	/**
 	 * Main method
 	 * 
@@ -144,11 +146,13 @@ public class SimulationStudy {
 	public String cthQueueOccupancy = "continuousTimeHistogramQueueOccupancy";
 	public String ctcServerUtilization = "continuousTimeCounterServerUtilization";
 	public String cthServerUtilization = "continuousTimeHistogramServerUtilization";
-	public String dtcBatchWaitingTime = "discreteTimeCounterBatchWaitingTime";
-	public String tempdtcBatchWaitingTime = "temporaryDiscreteTimeCounterBatchWaitingTime";
-	public String dtcBatchServiceTime = "discreteTimeCounterBatchServiceTime";
-	public String tempdtcBatchServiceTime = "temporaryDiscreteTimeCounterBatchServiceTime";
+	
 	public String ccreBatchWaitingTime = "confidenceCounterWithRelativeErrorBatchWaitingTime";
+	public String dtcBatchWaitingTime = "discreteTimeCounterBatchWaitingTime";
+	
+	public String dtcBatchServiceTime = "discreteTimeCounterBatchServiceTime";
+	public String tempdtcBatchWaitingTime = "temporaryDiscreteTimeCounterBatchWaitingTime";
+	public String tempdtcBatchServiceTime = "temporaryDiscreteTimeCounterBatchServiceTime";	
 	public String ccreWaitingTime = "confidenceCounterWithRelativeErrorWaitingTime";
 
 	public long numWaitingTimeExceeds5TimesServiceTime;
@@ -195,11 +199,33 @@ public class SimulationStudy {
 
 
 		/*
-		 * TODO Problem 5.1.2 - Create random variables for IAT and ST
+		 * Problem 5.1.2 - Create random variables for IAT and ST
 		 * You may use different random variables for this.randVarInterArrivalTime, since Cvar[IAT] = {0.5, 1, 2}
 		 * You can use this.cVar as a configuration parameter for Cvar[IAT]
 		 * !!! Make sure to use StdRNG objects with different seeds !!!
 		 */
+		StdRNG randST = new StdRNG();
+		randST.setSeed(0);
+		this.randVarServiceTime = new Exponential(randST, simulator.realTimeToSimTime(1));
+
+		// Modulo for granularity 0.05
+		double rho = setRho - (setRho % 0.05);
+		if (rho > 0.95 || rho < 0.05) {
+			throw new IllegalArgumentException("Your parameter setRho is smaller than 0.05 or larger than 0.95.");
+		}
+		double iat = 1 / rho;
+		
+		StdRNG randIAT = new StdRNG();
+		randIAT.setSeed(1);
+		if (setIATCvar < 1) {
+			this.randVarInterArrivalTime = new ErlangK(randIAT, simulator.realTimeToSimTime(iat), setIATCvar*iat);
+		} else if (setIATCvar == 1) {
+			this.randVarInterArrivalTime = new Exponential(randIAT, simulator.realTimeToSimTime(iat));
+		} else {
+			this.randVarInterArrivalTime = new HyperExponential(randIAT, simulator.realTimeToSimTime(iat), setIATCvar);
+		}
+		
+		
 	}
 
 	/**
@@ -231,13 +257,12 @@ public class SimulationStudy {
 		 * Problem 5.1.1 - Create a DiscreteConfidenceCounterWithRelativeError
 		 * In order to check later if the simulation can be terminated according to the condition
 		 */
-		statisticObjects.put(ccreBatchWaitingTime, new DiscreteConfidenceCounterWithRelativeError("waiting time/customer with batch mean", 0.1));
-		statisticObjects.put(ccreWaitingTime, new DiscreteConfidenceCounterWithRelativeError("waiting time/customer", 0.1));
-
-		
+		statisticObjects.put(ccreBatchWaitingTime, new DiscreteConfidenceCounterWithRelativeError("waiting time/customer with batch means", 0.1));
+			
 		/*
-		 * TODO Problem 5.1.4 - Create counter to calculate the mean waiting time with batch means method
+		 * Problem 5.1.4 - Create counter to calculate the mean waiting time with batch means method
 		 */
+		statisticObjects.put(dtcBatchWaitingTime, new DiscreteCounter("waiting time with batch means"));
 		/*
 		 * TODO Problem 5.1.4 - Provide means to keep track of E[WT] > 5 * E[ST]
 		 * !!! This is also called "waiting probability" in the sheet !!!
@@ -251,6 +276,7 @@ public class SimulationStudy {
 		/*
 		 * TODO Problem 5.1.5 - Create a DiscreteAutocorrelationCounter for batch means
 		 */
+		statisticObjects.put(dtacBatchWaitingTime, new DiscreteAutocorrelationCounter("mean_batch_waiting_time", 10));
 
 	}
 
