@@ -37,6 +37,8 @@ public class SimulationState {
 	 * Number of samples/customers in current batch.
 	 */
     public long numSamplesInCurrentBatch;
+    
+    public boolean batchFull;
 
 	private SimulationStudy sims;
 
@@ -51,6 +53,7 @@ public class SimulationState {
 		waitingCustomers = new SortableQueue();
         numSamples = 0;
         numSamplesInCurrentBatch = 0;
+        batchFull = false;
 
 		this.sims = sims;
 	}
@@ -78,12 +81,20 @@ public class SimulationState {
 
             if(numSamplesInCurrentBatch > sims.batchLength) {
                 numSamplesInCurrentBatch = 1;
+                batchFull = true;
             }
         }
     }
 
     /*
-	 * TODO You may introduce additional class methods
+	 * You may introduce additional class methods
 	 * e.g. for indicating that a new batch was initialized
 	 */
+    public boolean checkIfBatchFull() {
+    	return batchFull;
+    }
+    
+    public void resetBatchFull() {
+    	batchFull = false;
+    }
 }

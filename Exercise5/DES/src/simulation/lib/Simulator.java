@@ -1,7 +1,9 @@
 package simulation.lib;
 
 import simulation.lib.counter.Counter;
+import simulation.lib.counter.DiscreteAutocorrelationCounter;
 import simulation.lib.counter.DiscreteConfidenceCounterWithRelativeError;
+import simulation.lib.counter.DiscreteCounter;
 import simulation.lib.event.CustomerArrivalEvent;
 import simulation.lib.event.Event;
 import simulation.lib.event.IEventObserver;
@@ -196,16 +198,53 @@ public class Simulator implements IEventObserver{
             if (currentCustomer != null) {
 
             	/*
-				 * TODO Problem 5.1 - Handle batches and update your counters here
+				 * Problem 5.1 - Handle batches and update your counters here
 				 * - Update your batch means counters if a batch is full
 				 * - Update counters for individual samples
 				 * - !!! Also check if the simulation can be terminated !!!
 				 */
+            	DiscreteCounter tempdtcBatchWaitingTime = (DiscreteCounter) sims.statisticObjects.get(sims.tempdtcBatchWaitingTime);
+            	DiscreteCounter tempdtcBatchServiceTime = (DiscreteCounter) sims.statisticObjects.get(sims.tempdtcBatchServiceTime);		
+        		            	
+            	if(this.state.checkIfBatchFull()) {
+            		// WT: Count the full batch's waiting time mean value to the overall counter and the autocorrelation counter
+            		DiscreteConfidenceCounterWithRelativeError ccreBatchWaitingTime = (DiscreteConfidenceCounterWithRelativeError) sims.statisticObjects.get(sims.ccreBatchWaitingTime);
+            		DiscreteAutocorrelationCounter dtacBatchWaitingTime = (DiscreteAutocorrelationCounter) sims.statisticObjects.get(sims.dtacBatchWaitingTime);
+            		ccreBatchWaitingTime.count(tempdtcBatchWaitingTime.getMean());
+            		dtacBatchWaitingTime.count(tempdtcBatchWaitingTime.getMean());
+            		tempdtcBatchWaitingTime.reset();
+            		
+            		// ST: mirror the above for service time but not the autocorrelation
+            		DiscreteConfidenceCounterWithRelativeError ccreBatchServiceTime = (DiscreteConfidenceCounterWithRelativeError) sims.statisticObjects.get(sims.ccreBatchServiceTime);
+            		ccreBatchServiceTime.count(tempdtcBatchServiceTime.getMean());
+            		tempdtcBatchServiceTime.reset();
 
-
-                // update customer service end time
+            		// Do a check for numBatchWaitingTimeExceeds5TimesBatchServiceTime
+            		if(tempdtcBatchWaitingTime.getMean() > (5 * tempdtcBatchServiceTime.getMean())) {
+            			sims.numBatchWaitingTimeExceeds5TimesBatchServiceTime++;
+            		}
+            		
+            		// Terminate simulation properties
+            		if (ccreBatchWaitingTime.maxRelErr() < 0.05 || ccreBatchWaitingTime.maxAbsErr() < 0.0001) {
+            			stop();
+            		}
+            		
+            		this.sims.numBatches++;
+            		this.state.resetBatchFull();
+            	}
+            	// update customer service end time
                 currentCustomer.serviceEndTime = getSimTime();
+                
+                // Do a check for numWaitingTimeExceeds5TimesServiceTime
+        		if(tempdtcBatchWaitingTime.getMean() > (5 * tempdtcBatchServiceTime.getMean())) {
+        			sims.numWaitingTimeExceeds5TimesServiceTime++;
+        		}
 
+        		tempdtcBatchWaitingTime.count(simTimeToRealTime(currentCustomer.getTimeInQueue()));
+        		tempdtcBatchServiceTime.count(simTimeToRealTime(currentCustomer.getTimeInService()));
+        		
+        		DiscreteConfidenceCounterWithRelativeError ccreWaitingTime = (DiscreteConfidenceCounterWithRelativeError) sims.statisticObjects.get(sims.ccreWaitingTime);
+        		ccreWaitingTime.count(simTimeToRealTime(currentCustomer.getTimeInQueue()));
 
                 sims.statisticObjects.get(sims.dtcWaitingTime).count(simTimeToRealTime(currentCustomer.getTimeInQueue()));
                 sims.statisticObjects.get(sims.dthWaitingTime).count(simTimeToRealTime(currentCustomer.getTimeInQueue()));
@@ -255,5 +294,9 @@ public class Simulator implements IEventObserver{
 	 */
 	public void stopEventHandler(Object sender) {
 		stop();
+	}
+	
+	public long getNumSamples() {
+		return state.numSamples;
 	}
 }

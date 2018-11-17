@@ -1,0 +1,2 @@
+#counter ; numSamples ; MEAN; VAR; STD; CVAR; MIN; MAX; COV; CORR
+mean_batch_waiting_time (lag=0);0;0.0;0.0;0.0;0.0;Infinity;-Infinity;NaN;1.0

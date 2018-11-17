@@ -30,7 +30,7 @@ public class SimulationStudy {
 	 * Problem 5.1.1 - nInit and lBatch
 	 */
 	long setNInit = 100;
-	long setLBatch = 100;
+	long setLBatch = 1000;
 	
 	/*
 	 * Problem 5.1.3 - Add attributes to configure your E[ST] and E[IAT] for the simulation
@@ -41,7 +41,7 @@ public class SimulationStudy {
 	 // e.g. protected cNInit = ...
 	 //protected cCvar = ... <- configuration Parameter for cVar[IAT]
 	double setRho = 0.5;
-	double setIATCvar = 1;
+	double setIATCvar = 2;
 	
 	/**
 	 * Main method
@@ -133,7 +133,7 @@ public class SimulationStudy {
 	public long numBatches;
 
 	/*
-	 * TODO Problem 5.1 - naming your statistic objects
+	 * Problem 5.1 - naming your statistic objects
 	 * Here you have to set some names (as Sting objects) for all your statistic objects
 	 * They are later used to retrieve them from the dictionary
 	 */
@@ -147,12 +147,12 @@ public class SimulationStudy {
 	public String ctcServerUtilization = "continuousTimeCounterServerUtilization";
 	public String cthServerUtilization = "continuousTimeHistogramServerUtilization";
 	
-	public String ccreBatchWaitingTime = "confidenceCounterWithRelativeErrorBatchWaitingTime";
-	public String dtcBatchWaitingTime = "discreteTimeCounterBatchWaitingTime";
-	
-	public String dtcBatchServiceTime = "discreteTimeCounterBatchServiceTime";
 	public String tempdtcBatchWaitingTime = "temporaryDiscreteTimeCounterBatchWaitingTime";
+	public String ccreBatchWaitingTime = "confidenceCounterWithRelativeErrorBatchWaitingTime";
+	
 	public String tempdtcBatchServiceTime = "temporaryDiscreteTimeCounterBatchServiceTime";	
+	public String ccreBatchServiceTime = "confidenceCounterWithRelativeErrorBatchServiceTime";
+	
 	public String ccreWaitingTime = "confidenceCounterWithRelativeErrorWaitingTime";
 
 	public long numWaitingTimeExceeds5TimesServiceTime;
@@ -258,26 +258,34 @@ public class SimulationStudy {
 		 * In order to check later if the simulation can be terminated according to the condition
 		 */
 		statisticObjects.put(ccreBatchWaitingTime, new DiscreteConfidenceCounterWithRelativeError("waiting time/customer with batch means", 0.1));
-			
+		statisticObjects.put(ccreBatchServiceTime, new DiscreteConfidenceCounterWithRelativeError("service time/customer with batch means", 0.1));
+		
 		/*
 		 * Problem 5.1.4 - Create counter to calculate the mean waiting time with batch means method
 		 */
-		statisticObjects.put(dtcBatchWaitingTime, new DiscreteCounter("waiting time with batch means"));
+		// Why? Isnt this the ccreBatchWaitingTime?
+		
 		/*
-		 * TODO Problem 5.1.4 - Provide means to keep track of E[WT] > 5 * E[ST]
+		 * Problem 5.1.4 - Provide means to keep track of E[WT] > 5 * E[ST]
 		 * !!! This is also called "waiting probability" in the sheet !!!
 		 */
+		statisticObjects.put(tempdtcBatchWaitingTime, new DiscreteCounter("waiting time of last batch"));
+		statisticObjects.put(tempdtcBatchServiceTime, new DiscreteCounter("service time of last batch"));
+		
 		/*
-		 * TODO Problem 5.1.4 - Create confidence counter for individual waiting time samples
+		 * Problem 5.1.4 - Create confidence counter for individual waiting time samples
 		 */
+		statisticObjects.put(ccreWaitingTime, new DiscreteConfidenceCounterWithRelativeError("waiting time/customer", 0.1));
+				
 		/*
-		 * TODO Problem 5.1.4 - Create confidence counter for to count waiting times with batch means method
+		 * Problem 5.1.4 - Create confidence counter for to count waiting times with batch means method
 		 */
+		// Why? Isnt this the ccreBatchWaitingTime?
+		
 		/*
-		 * TODO Problem 5.1.5 - Create a DiscreteAutocorrelationCounter for batch means
+		 * Problem 5.1.5 - Create a DiscreteAutocorrelationCounter for batch means
 		 */
 		statisticObjects.put(dtacBatchWaitingTime, new DiscreteAutocorrelationCounter("mean_batch_waiting_time", 10));
-
 	}
 
 
@@ -299,9 +307,19 @@ public class SimulationStudy {
 		}
 		if (isDebugReport) {
 			/*
-			 * TODO Problem 5.1 - Output reporting information!
+			 * Problem 5.1 - Output reporting information!
 			 * Print your statistic objects which are needed to answer the questions in the exercise sheet
 			 */
+			System.out.println(this.statisticObjects.get(this.ccreBatchWaitingTime).report());
+			System.out.println(this.statisticObjects.get(this.ccreBatchServiceTime).report());
+			System.out.println(this.statisticObjects.get(this.ccreWaitingTime).report());
+			System.out.println(this.statisticObjects.get(this.dtacBatchWaitingTime).report());
+			System.out.println(this.statisticObjects.get(this.ctcServerUtilization).report());
+			System.out.println(this.statisticObjects.get(this.ctcQueueOccupancy).report());
+
+			System.out.println("Waiting time > 5 times service time: " + ((numWaitingTimeExceeds5TimesServiceTime / (simulator.getNumSamples())*100) + "%"));
+			System.out.println("Waiting time > 5 times service time (batch): " + ((numBatchWaitingTimeExceeds5TimesBatchServiceTime / numBatches)*100) + "%");
+
 
 		}
 
