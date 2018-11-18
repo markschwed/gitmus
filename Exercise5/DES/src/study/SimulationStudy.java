@@ -41,7 +41,7 @@ public class SimulationStudy {
 	 // e.g. protected cNInit = ...
 	 //protected cCvar = ... <- configuration Parameter for cVar[IAT]
 	double setRho = 0.5;
-	double setIATCvar = 0.5;
+	double setIATCvar = 2;
 	
 	/**
 	 * Main method
@@ -317,8 +317,8 @@ public class SimulationStudy {
 			System.out.println(this.statisticObjects.get(this.ctcServerUtilization).report());
 			System.out.println(this.statisticObjects.get(this.ctcQueueOccupancy).report());
 
-			System.out.println("Waiting time > 5 times service time: " + ((numWaitingTimeExceeds5TimesServiceTime / (simulator.getNumSamples())*100) + "%"));
-			System.out.println("Waiting time > 5 times service time (batch): " + ((numBatchWaitingTimeExceeds5TimesBatchServiceTime / numBatches)*100) + "%");
+			System.out.println("Waiting time > 5 times service time: " + numWaitingTimeExceeds5TimesServiceTime);
+			System.out.println("Waiting time > 5 times service time (batch): " + numBatchWaitingTimeExceeds5TimesBatchServiceTime);
 
 
 		}

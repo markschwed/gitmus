@@ -212,12 +212,10 @@ public class Simulator implements IEventObserver{
             		DiscreteAutocorrelationCounter dtacBatchWaitingTime = (DiscreteAutocorrelationCounter) sims.statisticObjects.get(sims.dtacBatchWaitingTime);
             		ccreBatchWaitingTime.count(tempdtcBatchWaitingTime.getMean());
             		dtacBatchWaitingTime.count(tempdtcBatchWaitingTime.getMean());
-            		tempdtcBatchWaitingTime.reset();
-            		
+
             		// ST: mirror the above for service time but not the autocorrelation
             		DiscreteConfidenceCounterWithRelativeError ccreBatchServiceTime = (DiscreteConfidenceCounterWithRelativeError) sims.statisticObjects.get(sims.ccreBatchServiceTime);
             		ccreBatchServiceTime.count(tempdtcBatchServiceTime.getMean());
-            		tempdtcBatchServiceTime.reset();
 
             		// Do a check for numBatchWaitingTimeExceeds5TimesBatchServiceTime
             		if(tempdtcBatchWaitingTime.getMean() > (5 * tempdtcBatchServiceTime.getMean())) {
@@ -228,6 +226,9 @@ public class Simulator implements IEventObserver{
             		if (ccreBatchWaitingTime.maxRelErr() < 0.05 || ccreBatchWaitingTime.maxAbsErr() < 0.0001) {
             			stop();
             		}
+            		
+            		tempdtcBatchWaitingTime.reset();
+            		tempdtcBatchServiceTime.reset();
             		
             		this.sims.numBatches++;
             		this.state.resetBatchFull();
