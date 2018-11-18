@@ -30,7 +30,7 @@ public class SimulationStudy {
 	 * Problem 5.1.1 - nInit and lBatch
 	 */
 	long setNInit = 100;
-	long setLBatch = 1000;
+	long setLBatch = 100;
 	
 	/*
 	 * Problem 5.1.3 - Add attributes to configure your E[ST] and E[IAT] for the simulation
@@ -41,7 +41,7 @@ public class SimulationStudy {
 	 // e.g. protected cNInit = ...
 	 //protected cCvar = ... <- configuration Parameter for cVar[IAT]
 	double setRho = 0.5;
-	double setIATCvar = 2;
+	double setIATCvar = 0.5;
 	
 	/**
 	 * Main method
@@ -218,7 +218,7 @@ public class SimulationStudy {
 		StdRNG randIAT = new StdRNG();
 		randIAT.setSeed(1);
 		if (setIATCvar < 1) {
-			this.randVarInterArrivalTime = new ErlangK(randIAT, simulator.realTimeToSimTime(iat), setIATCvar*iat);
+			this.randVarInterArrivalTime = new ErlangK(randIAT, simulator.realTimeToSimTime(iat), setIATCvar*simulator.realTimeToSimTime(iat));			
 		} else if (setIATCvar == 1) {
 			this.randVarInterArrivalTime = new Exponential(randIAT, simulator.realTimeToSimTime(iat));
 		} else {

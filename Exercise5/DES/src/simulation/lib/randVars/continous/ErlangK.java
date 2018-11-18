@@ -88,7 +88,7 @@ public class ErlangK extends RandVar {
      */
     @Override
     public void setMeanAndStdDeviation(double m, double s) {
-        this.k = (int) Math.floor(1 / Math.pow(s / m, 2));
+    	k = (int) Math.floor(Math.pow(m/s, 2));
         this.lambda = this.k / m;
     }
 
