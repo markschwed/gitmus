@@ -30,7 +30,7 @@ public class SimulationStudy {
 	 * Problem 5.1.1 - nInit and lBatch
 	 */
 	long setNInit = 100;
-	long setLBatch = 100;
+	long setLBatch = 1000;
 	
 	/*
 	 * Problem 5.1.3 - Add attributes to configure your E[ST] and E[IAT] for the simulation
@@ -40,7 +40,7 @@ public class SimulationStudy {
 	 */
 	 // e.g. protected cNInit = ...
 	 //protected cCvar = ... <- configuration Parameter for cVar[IAT]
-	double setRho = 0.5;
+	double setRho = 0.95;
 	double setIATCvar = 2;
 	
 	/**
@@ -317,8 +317,8 @@ public class SimulationStudy {
 			System.out.println(this.statisticObjects.get(this.ctcServerUtilization).report());
 			System.out.println(this.statisticObjects.get(this.ctcQueueOccupancy).report());
 
-			System.out.println("Waiting time > 5 times service time: " + numWaitingTimeExceeds5TimesServiceTime);
-			System.out.println("Waiting time > 5 times service time (batch): " + numBatchWaitingTimeExceeds5TimesBatchServiceTime);
+			System.out.println("Waiting time > 5 times service time: " + (((double) numWaitingTimeExceeds5TimesServiceTime / (double) (simulator.getNumSamples())*100) + "%"));
+			System.out.println("Waiting time > 5 times service time (batch): " + (((double) numBatchWaitingTimeExceeds5TimesBatchServiceTime / (double) numBatches)*100) + "%");
 
 
 		}
